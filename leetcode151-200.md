@@ -38,6 +38,52 @@ class Solution {
 }
 ```
 ------
+## 171. Excel表列序号
+
+### **题目描述**
+给定一个Excel表格中的列名称，返回其相应的列序号。
+例如，
+
+    A -> 1
+    B -> 2
+    C -> 3
+    ...
+    Z -> 26
+    AA -> 27
+    AB -> 28 
+    ...
+示例 1:
+输入: "A"
+输出: 1
+
+示例 2:
+输入: "AB"
+输出: 28
+
+示例 3:
+输入: "ZY"
+输出: 701
+### **解题思路**
+不一样进制转换，26个字母相当于26进制，即基数为26；
+先把最高位的位权$pow(26,String.length()-1)$计算出来，再遍历字符串，位权也随着除以26；
+### **解题代码**
+```java
+class Solution {
+    public int titleToNumber(String columnTitle) {
+        int ans=0;
+        int len=columnTitle.length();
+        double pow=Math.pow(26,len-1);
+        pow=(int) pow;
+        for (int i = 0; i < len; i++) {
+            int num=columnTitle.charAt(i)-'A'+1;
+            ans+=(pow*num);
+            pow/=26;
+        }
+        return ans;
+    }
+}
+```
+------
 ## 198. 打家劫舍
 ### **题目描述**
 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。

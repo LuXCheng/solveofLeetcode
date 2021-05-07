@@ -62,6 +62,53 @@ class Solution {
 }
 ```
 ------
+## 22. 括号生成
+### **题目描述**
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。  
+
+示例 1：  
+输入：n = 3  
+输出：["((()))","(()())","(())()","()(())","()()()"]  
+
+示例 2：  
+输入：n = 1  
+输出：["()"]  
+ 
+提示：
+1 <= n <= 8
+### **解题思路**
+**回溯法**  
+**深度优先遍历**  
+使用DFS，判断字符串后是否添加'('或')';  
+由括号匹配的性质可以知道，只有当目前字符串左括号的数量小于n时，可添加左括号；当右括号数量小于左括号时，可添加右括号，所以我们可以设置两个变量，分别表示左、右括号的数量；
+### **解题代码**
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> list= new ArrayList<>();
+        getStr(list,new StringBuilder(),0,0,n);
+        return list;
+    }
+
+    public void getStr(List<String> list, StringBuilder str, int left, int right, int len)    {
+        if(str.length() == len*2) {
+            list.add(str.toString());
+            return;
+        }
+        if(left<len) {
+            str.append("(");
+            getStr(list, str, left+1, right, len);
+            str.deleteCharAt(str.length()-1);
+        }
+        if(right<left) {
+            str.append(")");
+            getStr(list, str, left, right+1, len);
+            str.deleteCharAt(str.length()-1);
+        }
+    }
+}
+```
+------
 ## 24. 两两交换链表中的节点
 
 ### **题目描述**

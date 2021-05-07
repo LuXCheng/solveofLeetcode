@@ -23,7 +23,7 @@
 题目数据保证列表表示的数字不含前导零
 [Leetcode2.两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 ### **解题思路**
-模拟题  
+链表模拟题  
 使用l1保存结果，需要注意的是当`l1.next=null && l2.next!=null`时，将l2.next赋给l1.next，以及在最后链表遍历完时，需要判断是否需要进位；
 ### **解题代码**
 ```java

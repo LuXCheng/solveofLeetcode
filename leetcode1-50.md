@@ -227,3 +227,126 @@ class Solution {
     }
 }
 ```
+------
+## 39. 组合总和
+### **题目描述**
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。  
+candidates 中的数字可以无限制重复被选取。  
+
+说明：  
+所有数字（包括 target）都是正整数。  
+解集不能包含重复的组合。   
+
+示例 1：  
+输入：candidates = [2,3,6,7], target = 7,  
+所求解集为：[[7],[2,2,3]]  
+
+示例 2：  
+输入：candidates = [2,3,5], target = 8,  
+所求解集为：[[2,2,2,2],[2,3,3],[3,5]]
+ 
+提示：  
+1 <= candidates.length <= 30  
+1 <= candidates[i] <= 200  
+candidate 中的每个元素都是独一无二的。  
+1 <= target <= 500  
+### **解题思路**
+**深度优先搜索+剪枝**  
+按照candidates从下标0开始向后搜索，如果当前candidates的数满足进入List<Integer>中，因为题目中写到每个数可以无限次使用，所以从当前下标开始继续向前搜索，而如果不从选择当前数，则选择下一个数，当idx>candidates.length时，回溯；
+例如：  
+```java
+search(int idx){
+    search(idx+1);
+    if(target-candidates[idx]>=0){
+        search(idx);
+    }
+}
+```
+
+### **解题代码**
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> ans=new ArrayList<List<Integer>>();
+        List<Integer> sub=new ArrayList<>();
+        //Arrays.sort(candidates);
+        dfsCombinationSum(ans,sub,candidates,target,0);
+        return ans;
+    }
+
+    public void dfsCombinationSum(List<List<Integer>> ans,List<Integer> sub,int[] candidates,int target,int idx) {
+        if(idx==candidates.length) {
+            return;
+        }
+        if(target==0) {
+            ans.add(new ArrayList(sub));
+            return;
+        }
+
+        dfsCombinationSum(ans,sub,candidates,target,idx+1);
+
+        if(target-candidates[idx]>=0) {
+            sub.add(candidates[idx]);
+            dfsCombinationSum(ans, sub, candidates, target-candidates[idx], idx);
+            sub.remove(sub.size()-1);
+        }
+    }
+}
+```
+### **复杂度分析**
+
+- 时间复杂度 O(l) l为结果的长度大小
+- 空间复杂度 O(target) 主要为递归的深度
+
+------
+## 40. 组合总和 II
+
+### **题目描述**
+给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。  
+candidates 中的每个数字在每个组合中只能使用一次。  
+
+说明：  
+所有数字（包括目标数）都是正整数。  
+解集不能包含重复的组合。   
+
+示例 1:  
+输入: candidates = [10,1,2,7,6,1,5], target = 8,  
+所求解集为:[[1, 7],[1, 2, 5],[2, 6],[1, 1, 6]]  
+
+示例 2:  
+输入: candidates = [2,5,2,1,2], target = 5,  
+所求解集为:[[1,2,2],[5]]  
+### **解题思路**
+`39.组合总和I`的扩展；  
+本题主要的是每个数只能使用一次，与39题的无限使用完全不同，能够最简单的想到的是先将candidates排序，才能避免数的重复使用；  
+避免数的重复使用即可以想到假如当前idx下标数组的数满足条件，那么之后的相等的数就不能再使用，因为这一个数就已经把该位置的数的情况搜索完了；  
+而从之前三数之和和四数之和经验，去除重复数使用while循环即可；  
+### **解题代码**
+```java
+class Solution {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> ans=new ArrayList<>();
+        List<Integer> sub=new ArrayList<>();
+        Arrays.sort(candidates);
+        dfsCombinationSum2(ans,sub,candidates,target,0);
+        return ans;
+    }
+
+    void dfsCombinationSum2(List<List<Integer>> ans,List<Integer> sub,int[] candidates,int target,int idx){
+        if(target==0) {
+            ans.add(new ArrayList<>(sub));
+            return;
+        }
+        for(int i=idx;i<candidates.length;i++) {
+            if(i>idx&&candidates[i]==candidates[i-1]) {
+                continue;
+            }
+            if(target-candidates[i]>=0) {
+                sub.add(candidates[i]);
+                dfsCombinationSum2(ans,sub,candidates,target-candidates[i],i+1);
+                sub.remove(sub.size()-1);
+            }
+        }
+    }
+}
+```
